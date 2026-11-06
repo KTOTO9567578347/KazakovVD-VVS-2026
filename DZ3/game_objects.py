@@ -7,9 +7,27 @@ class GameObject:
     icon: str
 
     def interact(self, player) -> bool:
+        """Аргументы:
+            player: Игрок, пытающийся взаимодействовать с объектом.
+
+        Возвращает:
+            False, так как базовый объект не обрабатывает взаимодействие.
+
+        Описание:
+            Задаёт стандартный интерфейс взаимодействия для объектов карты.
+        """
         return False
 
     def enter(self, player) -> None:
+        """Аргументы:
+            player: Игрок, вошедший на клетку объекта.
+
+        Возвращает:
+            None.
+
+        Описание:
+            Задаёт стандартный интерфейс реакции на вход игрока в клетку.
+        """
         pass
 
 
@@ -18,6 +36,15 @@ class Loot(GameObject):
     inventory_name: str
 
     def interact(self, player) -> bool:
+        """Аргументы:
+            player: Игрок, подбирающий предмет.
+
+        Возвращает:
+            True, чтобы удалить подобранный объект с карты.
+
+        Описание:
+            Добавляет предмет в коробку игрока.
+        """
         player.inventory.append(self.inventory_name)
         print(f"В инвентарь добавлено: {self.inventory_name}")
         return True
@@ -28,6 +55,15 @@ class MoneyPile(GameObject):
     amount: int = 50
 
     def interact(self, player) -> bool:
+        """Аргументы:
+            player: Игрок, подбирающий деньги.
+
+        Возвращает:
+            True, чтобы удалить подобранные деньги с карты.
+
+        Описание:
+            Начисляет игроку указанную сумму.
+        """
         player.money += self.amount
         print(f"Подобрано: {self.name} (+{self.amount}₽)")
         return True
@@ -39,6 +75,16 @@ class LockedCache(GameObject):
     reward: str = "Ключ от выхода"
 
     def interact(self, player) -> bool:
+        """Аргументы:
+            player: Игрок, пытающийся открыть тайник.
+
+        Возвращает:
+            True при открытии тайника; иначе False.
+
+        Описание:
+            Проверяет альтернативные наборы требуемых предметов, обменивает
+            подходящий набор на награду или выводит подсказку.
+        """
         available = next(
             (
                 requirements
@@ -68,6 +114,15 @@ class LockedExit(GameObject):
     key_name: str = "Ключ от выхода"
 
     def interact(self, player) -> bool:
+        """Аргументы:
+            player: Игрок, пытающийся открыть выход.
+
+        Возвращает:
+            True при открытии выхода; иначе False.
+
+        Описание:
+            Проверяет наличие ключа и отмечает завершение игры.
+        """
         if self.key_name not in player.inventory:
             print("🔒 Выход закрыт. Откройте запертый тайник и возьмите ключ.")
             print("💡 Полный порядок прохождения: команда guide.")
@@ -84,6 +139,16 @@ class ScaldingPipe(GameObject):
     protective_item: str = "Жилет электрика"
 
     def enter(self, player) -> None:
+        """Аргументы:
+            player: Игрок, вошедший на клетку трубы.
+
+        Возвращает:
+            None.
+
+        Описание:
+            Расходует защитный жилет или уменьшает здоровье игрока на величину
+            урона трубы.
+        """
         if self.protective_item in player.inventory:
             player.inventory.remove(self.protective_item)
             print("🦺 Жилет электрика защитил от кипятка и сгорел.")
@@ -100,6 +165,16 @@ class Portal(GameObject):
     destination: tuple[int, int] | None = None
 
     def enter(self, player) -> None:
+        """Аргументы:
+            player: Игрок, вошедший на клетку портала.
+
+        Возвращает:
+            None.
+
+        Описание:
+            Перемещает игрока в координаты парного портала либо выбрасывает
+            ValueError, если назначение не задано.
+        """
         if self.destination is None:
             raise ValueError(f"Для портала «{self.name}» не найдена парная точка.")
         player.x, player.y = self.destination

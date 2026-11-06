@@ -2,19 +2,54 @@ import inspect
 
 class level:
     def print_method_menu(self):
+        """Аргументы: нет.
+
+        Возвращает:
+            None.
+
+        Описание:
+            Печатает нумерованный список описаний методов уровня.
+        """
         print("\nВыберите номер метода:")
         for i, cmd in enumerate(self.descr_list):
             print(f"({i}) {cmd}")
 
     def __init__(self, f_list, descr_list):
+        """Аргументы:
+            f_list: Список методов, доступных на уровне.
+            descr_list: Описания методов в том же порядке.
+
+        Возвращает:
+            None.
+
+        Описание:
+            Сохраняет методы и описания в объекте уровня.
+        """
         self.f_list = f_list
         self.descr_list = descr_list
 
     def opis(self):
+        """Аргументы: нет.
+
+        Возвращает:
+            None.
+
+        Описание:
+            Печатает описания доступных методов уровня.
+        """
         print("\nУровень умеет: ")
         print(*self.descr_list, sep = '\n')
 
     def make_test(self, inp_args):
+        """Аргументы:
+            inp_args: Тестовые наборы аргументов для методов уровня.
+
+        Возвращает:
+            None.
+
+        Описание:
+            Запускает методы на тестовых данных и печатает результаты или ошибки.
+        """
         print(f"\nТЕСТИРОВАНИЕ. Применение к тестовым данным методов:")
         for i, (descr, func) in enumerate(zip(self.descr_list, self.f_list)):
             print(f"\nМетод {i}: {descr}")
@@ -31,6 +66,16 @@ class level:
         print("\nТестирование завершено.\n")
 
     def run(self, test_args):
+        """Аргументы:
+            test_args: Тестовые наборы, передаваемые в make_test.
+
+        Возвращает:
+            None.
+
+        Описание:
+            Показывает описание и тесты уровня, затем предлагает выбрать метод
+            и запустить его с введёнными пользователем аргументами.
+        """
         print("OK")
         self.opis()
         self.make_test(test_args)

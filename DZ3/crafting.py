@@ -13,9 +13,26 @@ class Recipe:
 
 class RecipeBook:
     def __init__(self, recipes: tuple[Recipe, ...]):
+        """Аргументы:
+            recipes: Набор рецептов, доступных в книге.
+
+        Возвращает:
+            None.
+
+        Описание:
+            Создаёт каталог рецептов по их командным именам.
+        """
         self.recipes = {recipe.name: recipe for recipe in recipes}
 
     def describe(self) -> None:
+        """Аргументы: нет.
+
+        Возвращает:
+            None.
+
+        Описание:
+            Печатает названия рецептов, ингредиенты, цены и пояснения.
+        """
         print("🔧 РЕЦЕПТЫ:")
         for recipe in self.recipes.values():
             ingredients = " + ".join(recipe.ingredients)
@@ -23,6 +40,17 @@ class RecipeBook:
             print(f"    {recipe.description}")
 
     def craft(self, player, requested_name: str) -> bool:
+        """Аргументы:
+            player: Игрок, чьи предметы и баланс используются для крафта.
+            requested_name: Имя рецепта из каталога.
+
+        Возвращает:
+            True при успешном создании; иначе False.
+
+        Описание:
+            Проверяет рецепт, наличие ингредиентов и денег, затем расходует
+            ресурсы и добавляет результат в коробку игрока.
+        """
         recipe = self.recipes.get(requested_name.casefold())
         if recipe is None:
             print(f"❌ Рецепт «{requested_name}» не найден. Введите crafts.")

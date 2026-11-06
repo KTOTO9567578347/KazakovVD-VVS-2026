@@ -13,10 +13,15 @@ RENDER_ELEMENTS = {
 
 class Maze:
     def __init__(self, grid: list[list[bool]], displayable: list[list[str]]):
-        """
-        Инициализация лабиринта.
-        grid: 2D матрица, где True - стена, False - проход.
-        displayable: 2D матрица со стилизованными символами (из генератора).
+        """Аргументы:
+            grid: Матрица клеток, где True обозначает стену.
+            displayable: Матрица стилизованных символов лабиринта.
+
+        Возвращает:
+            None.
+
+        Описание:
+            Сохраняет матрицы лабиринта и вычисляет его размеры.
         """
         self.grid = grid
         self.displayable = displayable
@@ -24,9 +29,13 @@ class Maze:
         self.width = len(grid[0]) if self.height > 0 else 0
 
     def get_random_empty_position(self) -> tuple[int, int]:
-        """
-        Находит случайную пустую клетку в лабиринте.
-        Возвращает кортеж (logical_x, logical_y).
+        """Аргументы: нет.
+
+        Возвращает:
+            Пару логических координат случайной свободной клетки.
+
+        Описание:
+            Находит все внутренние клетки-проходы и выбирает одну случайно.
         """
         empty_cells = []
         for y in range(1, self.height - 1):
@@ -39,7 +48,16 @@ class Maze:
         return random.choice(empty_cells)
 
     def is_wall(self, logical_x: int, logical_y: int) -> bool:
-        """Проверяет стену по логическим координатам персонажа (смещение +1)."""
+        """Аргументы:
+            logical_x: Логическая координата по горизонтали.
+            logical_y: Логическая координата по вертикали.
+
+        Возвращает:
+            True, если клетка является стеной или находится вне границ.
+
+        Описание:
+            Переводит логические координаты в индексы матрицы и проверяет клетку.
+        """
         array_x = logical_x + 1
         array_y = logical_y + 1
 
@@ -49,7 +67,18 @@ class Maze:
         return self.grid[array_y][array_x]
 
     def _is_visible_straight(self, char_x: int, char_y: int, target_x: int, target_y: int) -> bool:
-        """Проверяет видимость СТРОГО пустого прохода по прямой линии."""
+        """Аргументы:
+            char_x: Координата наблюдателя по горизонтали.
+            char_y: Координата наблюдателя по вертикали.
+            target_x: Координата цели по горизонтали.
+            target_y: Координата цели по вертикали.
+
+        Возвращает:
+            True, если цель находится по прямой и между ней и наблюдателем нет стены.
+
+        Описание:
+            Проверяет линию видимости по горизонтали или вертикали.
+        """
         if char_x != target_x and char_y != target_y:
             return False
 
@@ -68,7 +97,19 @@ class Maze:
         return True
 
     def _should_reveal_wall(self, char_x: int, char_y: int, wall_x: int, wall_y: int, vision_radius: int) -> bool:
-        """Проверяет, должна ли стена быть видимой (есть ли рядом освещенный проход)."""
+        """Аргументы:
+            char_x: Координата наблюдателя по горизонтали.
+            char_y: Координата наблюдателя по вертикали.
+            wall_x: Координата проверяемой стены по горизонтали.
+            wall_y: Координата проверяемой стены по вертикали.
+            vision_radius: Радиус обзора игрока.
+
+        Возвращает:
+            True, если рядом со стеной есть видимый свободный проход.
+
+        Описание:
+            Проверяет соседние клетки стены и их видимость из позиции игрока.
+        """
         neighbors = [
             (wall_x + 1, wall_y), (wall_x - 1, wall_y),
             (wall_x, wall_y + 1), (wall_x, wall_y - 1)
@@ -83,7 +124,19 @@ class Maze:
         return False
 
     def display(self, active_player, characters: list, items_on_map: dict, vision_radius: int = 5, fog_of_war: bool = True):
-        """Отрисовывает лабиринт с учетом персонажей и предметов на полу."""
+        """Аргументы:
+            active_player: Игрок, относительно которого рассчитывается видимость.
+            characters: Персонажи для отображения на карте.
+            items_on_map: Игровые объекты, индексированные логическими координатами.
+            vision_radius: Радиус обзора при включённом тумане войны.
+            fog_of_war: Нужно ли скрывать невидимые области.
+
+        Возвращает:
+            None.
+
+        Описание:
+            Печатает лабиринт, персонажей и видимые объекты карты.
+        """
         char_array_x = active_player.x + 1
         char_array_y = active_player.y + 1
         
