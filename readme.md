@@ -10,4 +10,4 @@ DZ3/ - Игра на массивах. Потребуется создать ven
 
 DZ4/ - Датасет "Титаник"
 
-DZ5/ - интерфейсы, создайте venv, устновите venv, из него запускайте interface_qt.py и interface_tk.py
+DZ5/ - интерфейсы, создайте venv, устновите venv, из него запускайте interface_qt.py и interface_tk.py (если ругается проблема 100% у вас в системе, на Linux Ubuntu помогло GDK_BACKEND=x11 python interface_qt.py)
